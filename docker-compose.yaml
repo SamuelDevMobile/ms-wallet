@@ -11,3 +11,9 @@ services:
     environment:
       - MYSQL_DATABASE=wallet
       - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge
