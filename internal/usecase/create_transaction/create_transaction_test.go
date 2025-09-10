@@ -57,6 +57,7 @@ func TestCreateTransactionUseCase_Execute(t *testing.T) {
 
 	dispatcher := events.NewEventDispatcher()
 	eventTest := event.NewTransactionCreated()
+
 	uc := NewCreateTransactionUseCase(mockTransaction, mockAccount, dispatcher, eventTest)
 	output, err := uc.Execute(inputDto)
 	assert.Nil(t, err)
