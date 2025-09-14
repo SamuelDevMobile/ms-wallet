@@ -2,6 +2,8 @@ package entity
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Account struct {
@@ -17,6 +19,7 @@ func NewAccount(client *Client) *Account {
 		return nil
 	}
 	account := &Account{
+		ID:        uuid.New().String(),
 		Client:    client,
 		Balance:   0,
 		CreatedAt: time.Now(),

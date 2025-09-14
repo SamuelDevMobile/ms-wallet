@@ -6,7 +6,7 @@ import (
 )
 
 type CreateAccountInputDTO struct {
-	ClientID string
+	ClientID string `json:"client_id"`
 }
 
 type CreateAccountOutputDTO struct {
@@ -35,7 +35,9 @@ func (uc *CreateAccountUseCase) Execute(input CreateAccountInputDTO) (*CreateAcc
 	if err != nil {
 		return nil, err
 	}
-	return &CreateAccountOutputDTO{
+	output := &CreateAccountOutputDTO{
 		ID: account.ID,
-	}, nil
+	}
+
+	return output, nil
 }
