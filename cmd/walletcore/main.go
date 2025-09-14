@@ -1,4 +1,4 @@
-package walletcore
+package main
 
 import (
 	"database/sql"
@@ -9,6 +9,8 @@ import (
 	"github.com/SamuelDevMobile/ms-wallet/internal/usecase/create_account"
 	"github.com/SamuelDevMobile/ms-wallet/internal/usecase/create_client"
 	"github.com/SamuelDevMobile/ms-wallet/internal/usecase/create_transaction"
+	"github.com/SamuelDevMobile/ms-wallet/internal/web"
+	"github.com/SamuelDevMobile/ms-wallet/internal/web/webserver"
 	"github.com/SamuelDevMobile/ms-wallet/pkg/events"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -31,4 +33,16 @@ func main() {
 	createClientUseCase := create_client.NewCreateClientUseCase(clientDb)
 	createAccountUseCase := create_account.NewCreateAccountUseCase(accountDb, clientDb)
 	createTransactionUseCase := create_transaction.NewCreateTransactionUseCase(transactionDb, accountDb, eventDispatcher, transactionCreatedEvent)
+
+	webserver := webserver.NewWebServer(":3000")
+
+	clientHandler := web.NewWebClientHandler(*createClientUseCase)
+	accountHandler := web.NewWebAccountHandler(*createAccountUseCase)
+	transactionHandler := web.NewWebTransactionHandler(*createTransactionUseCase)
+
+	webserver.AddHandler("/clients", clientHandler.CreateClient)
+	webserver.AddHandler("/accounts", accountHandler.CreateAccount)
+	webserver.AddHandler("/transactions", transactionHandler.CreateTransaction)
+
+	webserver.Start()
 }
